@@ -12,7 +12,7 @@ if os.path.exists('./sourcedata.csv'):
 
 
 with st.sidebar:
-    st.title("Automated Machine Learning Application")
+    st.title("AutoML")
     st.info("By Akshith Chowdary")
     st.image("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTnxi_YIKmP9dAESxenlz-fl5En_rFFSgdYtw&usqp=CAU", width=250)
     choose = st.radio("Options", ['Upload', 'Profiling', 'Model Building', 'Download Model'])
@@ -23,19 +23,19 @@ if choose == "Upload":
     data_uploaded_csv = st.file_uploader("Upload Your CSV Dataset")
     if data_uploaded_csv:
         df_csv = pd.read_csv(data_uploaded_csv, index_col=None, encoding='ISO-8859-1')
-        df_csv.to_csv('dataset.csv', index=None)
+        df_csv.to_csv('sourcedata.csv', index=None)
         st.dataframe(df_csv, width=900)
 
     st.title("Upload Your Excel Dataset")
     data_uploaded_excel = st.file_uploader("Upload Your EXCEL Dataset")
     if data_uploaded_excel:
         df_excel = pd.read_excel(data_uploaded_excel, index_col=None)
-        df_excel.to_csv('dataset.csv', index=None)
-        df_csv = pd.read_csv('dataset.csv')
+        df_excel.to_csv('sourcedata.csv', index=None)
+        df_csv = pd.read_csv('sourcedata.csv')
         st.dataframe(df_csv, width=900)
 
 if choose == "Profiling":
-    st.title("Automatic Exploratory Data Analysis")
+    st.title("Profiling your Data")
 
     profile_df = df_csv.profile_report()
     st_profile_report(profile_df)
@@ -46,7 +46,7 @@ if choose == "Model Building":
 
     option = st.selectbox("Select your problem type",
                           ("Select an option", "Regression", "Classification", "Anomaly Detection", "Clustering",
-                           "Time Series", "Topic Modelling", "Natural Language Processing"))
+                           "Time Series", "Topic Modelling"))
     st.write('You selected:', option)
 
     if option == "Classification":
@@ -187,94 +187,6 @@ if choose == "Model Building":
             lda_results = assign_model(best_model_tm)
             st.dataframe(lda_results).head(20)
 
-    if option == "Natural Language Processing":
-        pass
-        # from sklearn.model_selection import train_test_split
-        # from pycaret.nlp import setup, models, plot_model, create_model, save_model, assign_model,evaluate_model
-        # import regex as re
-        # import numpy as np
-        # import spacy
-        # from textblob import TextBlob
-        # from sklearn.feature_extraction.text import TfidfVectorizer, TfidfTransformer
-        #
-        # nlp = spacy.load('en_core_web_sm')
-        # option_input = st.selectbox("Choose the input features", df_csv.columns)
-        # option_target = st.selectbox("Choose the target features", df_csv.columns)
-        # if st.button("Train Model"):
-        #     # train, test = train_test_split(df_csv, test_size=0.3, random_state=42)
-        #     # input_feature, target = option_input, option_target
-        #     #
-        #     # train_x, test_x, final, predicted = Auto_NLP(input_feature, train, test, target,
-        #     #                                              score_type="balanced_accuracy",
-        #     #                                              modeltype="Classification",
-        #     #
-        #     #                                              verbose=2,
-        #     #                                              build_model=True)
-        #     #
-        #     def clean_text(sent):
-        #         sent = sent.lower()  # Text to lowercase
-        #         pattern = 'http\S+'
-        #         sent = re.sub(pattern, '', sent)
-        #         pattern = '[^\w\s]'  # Removing punctuation
-        #         sent = re.sub(pattern, '', sent)
-        #         pattern = '\w*\d\w*'  # Removing words with numbers in between
-        #         sent = re.sub(pattern, '', sent)
-        #         pattern = '[^-9A-Za-z ]'
-        #         sent = re.sub(pattern, '', sent)
-        #         pattern = '^https?:\/\/.*[\r\n]*'
-        #         sent = re.sub(pattern, '', sent, flags=re.MULTILINE)
-        #         pattern = '<.*?>+'
-        #         sent = re.sub(pattern, '', sent)
-        #         pattern = '\x89Û_'
-        #         sent = re.sub(pattern, '', sent)
-        #         return sent
-        #
-        #
-        #     df_csv[option_input] = df_csv[option_input].apply(clean_text)
-        #
-        #
-        #     def lemmmatize_text(text):
-        #         sent = []
-        #         doc = nlp(text)
-        #         for token in doc:
-        #             sent.append(token.lemma_)
-        #         return " ".join(sent)
-        #
-        #
-        #     df_csv[option_input] = df_csv[option_input].apply(lemmmatize_text)
-        #
-        #
-        #     def get_POS_tags(text):
-        #         sent = []
-        #         blob = TextBlob(text)
-        #         sent = [word for (word, tag) in blob.tags if tag == 'NN']
-        #         return " ".join(sent)
-        #
-        #
-        #     df_csv[option_input] = df_csv[option_input].apply(get_POS_tags)
-        #     df_input = pd.DataFrame(df_csv[option_input])
-        #     df_target = pd.DataFrame(df_csv[option_target])
-        #     # df_new= pd.concat(option_target,axis=1)
-        #     # frames = [df_input, df_target]
-        #     result = pd.concat([df_input, df_target], axis=1)
-        #     st.dataframe(result)
-        #
-        #     best_model_nlp=setup(data=result, target=result.columns[1],multiclass=True,train_size=0.7)
-        #     best_model_nlp = compare_models('bert')
-        #     model=evaluate_model(best_model_nlp)
-        #
-        #     st.text(model)
-        #     st.info(best_model_nlp)
-        #     st.title("Analysis of model")
-        #     # plot_model(best_model_nlp, plot='auc', display_format='streamlit')
-        #     # plot_model(best_model_nlp, plot='confusion_matrix', display_format='streamlit')
-        #     # plot_model(best_model_nlp, plot='class_report', display_format='streamlit')
-        #     # plot_model(best_model_nlp, plot='pr', display_format='streamlit')
-        #     # save_model(best_model_nlp, 'best_model_classification')
-        #     # st.title("Model Predictions")
-        #     # st.dataframe(predict_model(best_model_nlp))
-        #     # predictions = predict_model(best_model_nlp, data=df_csv, raw_score=True)
-        #     # st.dataframe(predictions)
 if choose == "Download Model":
     with open('best_model_classification.pkl', 'rb') as f1:
         st.download_button('Download Model Classification', f1, file_name="best_model_classification.pkl")
