@@ -100,7 +100,7 @@ if choose == "Model Building":
             compare_df = pull(best_model_regression)
             st.dataframe(compare_df)
             st.info(best_model_regression)
-            st.title("Analysis of model")
+            st.title("Analysis of the model")
             plot_model(best_model_regression, plot='residuals', display_format='streamlit')
             plot_model(best_model_regression, plot='error', display_format='streamlit')
             plot_model(best_model_regression, plot='vc', display_format='streamlit')
